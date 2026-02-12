@@ -23,12 +23,17 @@ export class CompaniesHouseService {
   /**
    * Search for companies by name
    */
-  async searchCompanies(query: string, itemsPerPage: number = 20): Promise<CompaniesHouseCompany[]> {
+  async searchCompanies(
+    query: string,
+    itemsPerPage: number = 20,
+    startIndex: number = 0
+  ): Promise<CompaniesHouseCompany[]> {
     try {
       const response = await this.client.get('/search/companies', {
         params: {
           q: query,
           items_per_page: itemsPerPage,
+          start_index: startIndex,
         },
       })
 
@@ -105,16 +110,17 @@ export class CompaniesHouseService {
     companyName?: string
     sicCode?: string
     itemsPerPage?: number
+    startIndex?: number
   }): Promise<CompaniesHouseCompany[]> {
-    const { companyName, sicCode, itemsPerPage = 20 } = params
+    const { companyName, sicCode, itemsPerPage = 20, startIndex = 0 } = params
 
     if (companyName) {
-      return this.searchCompanies(companyName, itemsPerPage)
+      return this.searchCompanies(companyName, itemsPerPage, startIndex)
     } else if (sicCode) {
       return this.searchCompaniesBySIC(sicCode, itemsPerPage)
     } else {
       // Default search for active companies
-      return this.searchCompanies('limited', itemsPerPage)
+      return this.searchCompanies('limited', itemsPerPage, startIndex)
     }
   }
 }

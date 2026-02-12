@@ -1,8 +1,11 @@
 export interface SearchParams {
   minAge?: number
   maxAge?: number
-  sicCode?: string
   companyName?: string
+  industryDivision?: string
+  exactNameOnly?: boolean
+  activeCompaniesOnly?: boolean
+  includeNoRetirementMatches?: boolean
 }
 
 export interface Director {
@@ -16,6 +19,14 @@ export interface Director {
   resignedOn?: string
   occupation?: string
   nationality?: string
+}
+
+export interface OpportunityScoreBreakdown {
+  successionPressure: number
+  leadershipConcentration: number
+  businessMaturity: number
+  leadershipTenure: number
+  dataConfidence: number
 }
 
 export interface CompanyResult {
@@ -34,6 +45,9 @@ export interface CompanyResult {
   }
   directors: Director[]
   retiringSoonCount: number
+  knownDirectorAges: number
+  opportunityScore: number
+  scoreBreakdown: OpportunityScoreBreakdown
 }
 
 export interface CompaniesHouseCompany {
@@ -63,4 +77,36 @@ export interface CompaniesHouseOfficer {
   occupation?: string
   nationality?: string
   officer_role?: string
+}
+
+export interface IndustryMapping {
+  division_code: string
+  division_name: string
+  includes: string[]
+  keywords: string[]
+}
+
+export interface SearchResponseParams {
+  minAge: number
+  maxAge: number
+  companyName: string
+  industryDivision: string
+  industryName: string
+  exactNameOnly: boolean
+  activeCompaniesOnly: boolean
+  includeNoRetirementMatches: boolean
+}
+
+export interface SearchResponse {
+  results: CompanyResult[]
+  count: number
+  matchedCompaniesCount: number
+  searchParams: SearchResponseParams
+}
+
+export interface ShortlistEntry {
+  companyNumber: string
+  companyName: string
+  companyStatus: string
+  addedAt: string
 }
