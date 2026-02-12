@@ -84,3 +84,77 @@ export function buildIndustryQueries(industry: IndustryMapping): string[] {
 
   return Array.from(new Set(seedQueries)).filter(query => query.trim().length > 0)
 }
+
+export function calculateCompanyAge(dateOfCreation?: string): number | undefined {
+  if (!dateOfCreation) {
+    return undefined
+  }
+
+  const creationDate = new Date(dateOfCreation)
+  const now = new Date()
+  const ageInMilliseconds = now.getTime() - creationDate.getTime()
+  const ageInYears = ageInMilliseconds / (1000 * 60 * 60 * 24 * 365.25)
+
+  return Math.floor(ageInYears)
+}
+
+export interface CompanyAgeRange {
+  minCompanyAge?: number
+  maxCompanyAge?: number
+}
+
+export function parseAndValidateCompanyAgeRange(
+  minCompanyAgeRaw: string | null,
+  maxCompanyAgeRaw: string | null
+): CompanyAgeRange {
+  const result: CompanyAgeRange = {}
+
+  if (minCompanyAgeRaw && minCompanyAgeRaw.trim() !== '') {
+    const minCompanyAge = Number(minCompanyAgeRaw)
+    if (!Number.isFinite(minCompanyAge) || minCompanyAge < 0) {
+      throw new Error('Minimum company age must be a non-negative number')
+    }
+    result.minCompanyAge = Math.round(minCompanyAge)
+  }
+
+  if (maxCompanyAgeRaw && maxCompanyAgeRaw.trim() !== '') {
+    const maxCompanyAge = Number(maxCompanyAgeRaw)
+    if (!Number.isFinite(maxCompanyAge) || maxCompanyAge < 0) {
+      throw new Error('Maximum company age must be a non-negative number')
+    }
+    result.maxCompanyAge = Math.round(maxCompanyAge)
+  }
+
+  if (result.minCompanyAge !== undefined && result.maxCompanyAge !== undefined) {
+    if (result.minCompanyAge > result.maxCompanyAge) {
+      throw new Error('Minimum company age cannot be greater than maximum company age')
+    }
+  }
+
+  return result
+}
+
+export function matchesCompanyAge(
+  dateOfCreation: string | undefined,
+  minCompanyAge?: number,
+  maxCompanyAge?: number
+): boolean {
+  if (minCompanyAge === undefined && maxCompanyAge === undefined) {
+    return true
+  }
+
+  const companyAge = calculateCompanyAge(dateOfCreation)
+  if (companyAge === undefined) {
+    return false
+  }
+
+  if (minCompanyAge !== undefined && companyAge < minCompanyAge) {
+    return false
+  }
+
+  if (maxCompanyAge !== undefined && companyAge > maxCompanyAge) {
+    return false
+  }
+
+  return true
+}

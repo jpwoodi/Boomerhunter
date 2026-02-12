@@ -7,8 +7,10 @@ import { calculateAge, isRetirementAge } from '@/lib/utils/age'
 import {
   buildIndustryQueries,
   matchesIndustrySic,
+  matchesCompanyAge,
   normalizeCompanyName,
   parseAndValidateAgeRange,
+  parseAndValidateCompanyAgeRange,
   parseBooleanParam,
 } from '@/lib/utils/search'
 import { CompanyResult, CompaniesHouseCompany, Director } from '@/types'
@@ -112,6 +114,10 @@ export async function GET(request: NextRequest) {
       searchParams.get('minAge'),
       searchParams.get('maxAge')
     )
+    const { minCompanyAge, maxCompanyAge } = parseAndValidateCompanyAgeRange(
+      searchParams.get('minCompanyAge'),
+      searchParams.get('maxCompanyAge')
+    )
     const companyName = searchParams.get('companyName') || ''
     const industryDivision = searchParams.get('industryDivision') || ''
     const exactNameOnly = parseBooleanParam(searchParams.get('exactNameOnly'), true)
@@ -155,6 +161,12 @@ export async function GET(request: NextRequest) {
     if (activeCompaniesOnly) {
       matchedCompanies = matchedCompanies.filter(
         company => (company.company_status || '').toLowerCase() === 'active'
+      )
+    }
+
+    if (minCompanyAge !== undefined || maxCompanyAge !== undefined) {
+      matchedCompanies = matchedCompanies.filter(company =>
+        matchesCompanyAge(company.date_of_creation, minCompanyAge, maxCompanyAge)
       )
     }
 
@@ -257,6 +269,8 @@ export async function GET(request: NextRequest) {
         exactNameOnly,
         activeCompaniesOnly,
         includeNoRetirementMatches,
+        minCompanyAge,
+        maxCompanyAge,
       },
     })
   } catch (error) {

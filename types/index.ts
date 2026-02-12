@@ -6,6 +6,8 @@ export interface SearchParams {
   exactNameOnly?: boolean
   activeCompaniesOnly?: boolean
   includeNoRetirementMatches?: boolean
+  minCompanyAge?: number
+  maxCompanyAge?: number
 }
 
 export interface Director {
@@ -95,6 +97,8 @@ export interface SearchResponseParams {
   exactNameOnly: boolean
   activeCompaniesOnly: boolean
   includeNoRetirementMatches: boolean
+  minCompanyAge?: number
+  maxCompanyAge?: number
 }
 
 export interface SearchResponse {

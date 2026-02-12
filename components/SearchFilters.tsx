@@ -17,6 +17,8 @@ export default function SearchFilters({ onSearch, isLoading }: SearchFiltersProp
   const [maxAge, setMaxAge] = useState<string>('75')
   const [companyName, setCompanyName] = useState<string>('')
   const [industryDivision, setIndustryDivision] = useState<string>('')
+  const [minCompanyAge, setMinCompanyAge] = useState<string>('')
+  const [maxCompanyAge, setMaxCompanyAge] = useState<string>('')
   const [exactNameOnly, setExactNameOnly] = useState(true)
   const [activeCompaniesOnly, setActiveCompaniesOnly] = useState(true)
   const [includeNoRetirementMatches, setIncludeNoRetirementMatches] = useState(false)
@@ -43,6 +45,22 @@ export default function SearchFilters({ onSearch, isLoading }: SearchFiltersProp
       return
     }
 
+    // Validate company age if provided
+    if (minCompanyAge && (!Number.isFinite(Number(minCompanyAge)) || Number(minCompanyAge) < 0)) {
+      setFormError('Minimum company age must be a non-negative number.')
+      return
+    }
+
+    if (maxCompanyAge && (!Number.isFinite(Number(maxCompanyAge)) || Number(maxCompanyAge) < 0)) {
+      setFormError('Maximum company age must be a non-negative number.')
+      return
+    }
+
+    if (minCompanyAge && maxCompanyAge && Number(minCompanyAge) > Number(maxCompanyAge)) {
+      setFormError('Minimum company age cannot be greater than maximum company age.')
+      return
+    }
+
     setFormError(null)
 
     const params: SearchParams = {
@@ -50,6 +68,8 @@ export default function SearchFilters({ onSearch, isLoading }: SearchFiltersProp
       maxAge: Math.round(parsedMaxAge),
       ...(companyName && { companyName }),
       ...(industryDivision && { industryDivision }),
+      ...(minCompanyAge && { minCompanyAge: Math.round(Number(minCompanyAge)) }),
+      ...(maxCompanyAge && { maxCompanyAge: Math.round(Number(maxCompanyAge)) }),
       exactNameOnly,
       activeCompaniesOnly,
       includeNoRetirementMatches,
@@ -100,10 +120,66 @@ export default function SearchFilters({ onSearch, isLoading }: SearchFiltersProp
           </div>
         </div>
 
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label htmlFor="minCompanyAge" className="block text-xs font-medium text-slate-700 mb-1.5">
+              MIN COMPANY AGE (YEARS)
+            </label>
+            <input
+              type="number"
+              id="minCompanyAge"
+              value={minCompanyAge}
+              onChange={(e) => setMinCompanyAge(e.target.value)}
+              placeholder="e.g., 10"
+              min={0}
+              className="w-full px-3 py-2 text-sm border border-slate-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="maxCompanyAge" className="block text-xs font-medium text-slate-700 mb-1.5">
+              MAX COMPANY AGE (YEARS)
+            </label>
+            <input
+              type="number"
+              id="maxCompanyAge"
+              value={maxCompanyAge}
+              onChange={(e) => setMaxCompanyAge(e.target.value)}
+              placeholder="e.g., 50"
+              min={0}
+              className="w-full px-3 py-2 text-sm border border-slate-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
+        </div>
+
+        <div className="flex gap-2">
+          <button
+            type="button"
+            onClick={() => { setMinCompanyAge('10'); setMaxCompanyAge('') }}
+            className="px-3 py-1.5 text-xs font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 rounded transition-colors"
+          >
+            10+ years
+          </button>
+          <button
+            type="button"
+            onClick={() => { setMinCompanyAge('15'); setMaxCompanyAge('') }}
+            className="px-3 py-1.5 text-xs font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 rounded transition-colors"
+          >
+            15+ years
+          </button>
+          <button
+            type="button"
+            onClick={() => { setMinCompanyAge('20'); setMaxCompanyAge('') }}
+            className="px-3 py-1.5 text-xs font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 rounded transition-colors"
+          >
+            20+ years
+          </button>
+        </div>
+
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div>
             <label htmlFor="minAge" className="block text-xs font-medium text-slate-700 mb-1.5">
-              MIN AGE
+              MIN DIRECTOR AGE
             </label>
             <input
               type="number"
@@ -118,7 +194,7 @@ export default function SearchFilters({ onSearch, isLoading }: SearchFiltersProp
 
           <div>
             <label htmlFor="maxAge" className="block text-xs font-medium text-slate-700 mb-1.5">
-              MAX AGE
+              MAX DIRECTOR AGE
             </label>
             <input
               type="number"
