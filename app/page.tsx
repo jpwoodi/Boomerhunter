@@ -91,10 +91,25 @@ export default function Home() {
         ...(params.maxAge !== undefined && { maxAge: params.maxAge.toString() }),
         ...(params.companyName && { companyName: params.companyName }),
         ...(params.industryDivision && { industryDivision: params.industryDivision }),
+        ...(params.minCompanyAge !== undefined && { minCompanyAge: params.minCompanyAge.toString() }),
+        ...(params.maxCompanyAge !== undefined && { maxCompanyAge: params.maxCompanyAge.toString() }),
         ...(params.exactNameOnly !== undefined && { exactNameOnly: String(params.exactNameOnly) }),
         ...(params.activeCompaniesOnly !== undefined && { activeCompaniesOnly: String(params.activeCompaniesOnly) }),
         ...(params.includeNoRetirementMatches !== undefined && { includeNoRetirementMatches: String(params.includeNoRetirementMatches) }),
       })
+
+      // Add location filter parameters
+      if (params.locationFilter) {
+        if (params.locationFilter.regions && params.locationFilter.regions.length > 0) {
+          queryParams.set('regions', params.locationFilter.regions.join(','))
+        }
+        if (params.locationFilter.localities && params.locationFilter.localities.length > 0) {
+          queryParams.set('localities', params.locationFilter.localities.join(','))
+        }
+        if (params.locationFilter.postcodeAreas && params.locationFilter.postcodeAreas.length > 0) {
+          queryParams.set('postcodeAreas', params.locationFilter.postcodeAreas.join(','))
+        }
+      }
 
       const response = await fetch(`/api/search?${queryParams}`)
       const data = await response.json() as ApiSearchResponse

@@ -1,3 +1,9 @@
+export interface LocationFilter {
+  regions?: string[]        // England, Scotland, Wales, Northern Ireland
+  localities?: string[]     // Counties/cities
+  postcodeAreas?: string[]  // e.g., "M", "SW", "EH"
+}
+
 export interface SearchParams {
   minAge?: number
   maxAge?: number
@@ -8,6 +14,7 @@ export interface SearchParams {
   includeNoRetirementMatches?: boolean
   minCompanyAge?: number
   maxCompanyAge?: number
+  locationFilter?: LocationFilter
 }
 
 export interface Director {

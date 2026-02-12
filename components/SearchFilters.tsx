@@ -2,7 +2,8 @@
 
 import { useState } from 'react'
 import { COMPANIES_HOUSE_INDUSTRIES } from '@/lib/data/industries'
-import { SearchParams } from '@/types'
+import { SearchParams, LocationFilter as LocationFilterType } from '@/types'
+import LocationFilter from './LocationFilter'
 
 interface SearchFiltersProps {
   onSearch: (params: SearchParams) => void
@@ -19,6 +20,7 @@ export default function SearchFilters({ onSearch, isLoading }: SearchFiltersProp
   const [industryDivision, setIndustryDivision] = useState<string>('')
   const [minCompanyAge, setMinCompanyAge] = useState<string>('')
   const [maxCompanyAge, setMaxCompanyAge] = useState<string>('')
+  const [locationFilter, setLocationFilter] = useState<LocationFilterType>({})
   const [exactNameOnly, setExactNameOnly] = useState(true)
   const [activeCompaniesOnly, setActiveCompaniesOnly] = useState(true)
   const [includeNoRetirementMatches, setIncludeNoRetirementMatches] = useState(false)
@@ -63,6 +65,10 @@ export default function SearchFilters({ onSearch, isLoading }: SearchFiltersProp
 
     setFormError(null)
 
+    const hasLocationFilter = (locationFilter.regions && locationFilter.regions.length > 0) ||
+      (locationFilter.localities && locationFilter.localities.length > 0) ||
+      (locationFilter.postcodeAreas && locationFilter.postcodeAreas.length > 0)
+
     const params: SearchParams = {
       minAge: Math.round(parsedMinAge),
       maxAge: Math.round(parsedMaxAge),
@@ -70,6 +76,7 @@ export default function SearchFilters({ onSearch, isLoading }: SearchFiltersProp
       ...(industryDivision && { industryDivision }),
       ...(minCompanyAge && { minCompanyAge: Math.round(Number(minCompanyAge)) }),
       ...(maxCompanyAge && { maxCompanyAge: Math.round(Number(maxCompanyAge)) }),
+      ...(hasLocationFilter && { locationFilter }),
       exactNameOnly,
       activeCompaniesOnly,
       includeNoRetirementMatches,
@@ -174,6 +181,10 @@ export default function SearchFilters({ onSearch, isLoading }: SearchFiltersProp
           >
             20+ years
           </button>
+        </div>
+
+        <div className="pt-3 border-t border-slate-200">
+          <LocationFilter value={locationFilter} onChange={setLocationFilter} />
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

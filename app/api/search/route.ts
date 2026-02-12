@@ -13,6 +13,7 @@ import {
   parseAndValidateCompanyAgeRange,
   parseBooleanParam,
 } from '@/lib/utils/search'
+import { matchesLocationFilter, parseLocationFilter } from '@/lib/utils/location'
 import { CompanyResult, CompaniesHouseCompany, Director } from '@/types'
 
 export const dynamic = 'force-dynamic'
@@ -118,6 +119,7 @@ export async function GET(request: NextRequest) {
       searchParams.get('minCompanyAge'),
       searchParams.get('maxCompanyAge')
     )
+    const locationFilter = parseLocationFilter(searchParams)
     const companyName = searchParams.get('companyName') || ''
     const industryDivision = searchParams.get('industryDivision') || ''
     const exactNameOnly = parseBooleanParam(searchParams.get('exactNameOnly'), true)
@@ -167,6 +169,12 @@ export async function GET(request: NextRequest) {
     if (minCompanyAge !== undefined || maxCompanyAge !== undefined) {
       matchedCompanies = matchedCompanies.filter(company =>
         matchesCompanyAge(company.date_of_creation, minCompanyAge, maxCompanyAge)
+      )
+    }
+
+    if (locationFilter) {
+      matchedCompanies = matchedCompanies.filter(company =>
+        matchesLocationFilter(company.registered_office_address, locationFilter)
       )
     }
 
