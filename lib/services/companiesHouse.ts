@@ -22,6 +22,7 @@ export class CompaniesHouseService {
 
   /**
    * Search for companies by name
+   * Note: The search API returns 'title' field, which we map to 'company_name'
    */
   async searchCompanies(
     query: string,
@@ -37,7 +38,14 @@ export class CompaniesHouseService {
         },
       })
 
-      return response.data.items || []
+      const items = response.data.items || []
+
+      // Map search results to CompaniesHouseCompany format
+      // Search API returns 'title' but we need 'company_name'
+      return items.map((item: any) => ({
+        ...item,
+        company_name: item.title || item.company_name,
+      }))
     } catch (error) {
       console.error('Error searching companies:', error)
       throw new Error('Failed to search companies')
