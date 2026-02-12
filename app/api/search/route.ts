@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server'
 import { CompaniesHouseService } from '@/lib/services/companiesHouse'
 import { COMPANIES_HOUSE_INDUSTRIES } from '@/lib/data/industries'
 import { mapWithConcurrency } from '@/lib/utils/async'
-import { calculateOpportunityScore } from '@/lib/utils/scoring'
 import { calculateAge, isRetirementAge } from '@/lib/utils/age'
 import {
   buildIndustryQueries,
@@ -221,12 +220,6 @@ export async function GET(request: NextRequest) {
             return null
           }
 
-          const score = calculateOpportunityScore({
-            company,
-            directors,
-            retiringSoonCount,
-          })
-
           return {
             companyNumber: company.company_number,
             companyName: company.company_name,
@@ -244,8 +237,6 @@ export async function GET(request: NextRequest) {
             directors,
             retiringSoonCount,
             knownDirectorAges,
-            opportunityScore: score.total,
-            scoreBreakdown: score.breakdown,
           }
         } catch (error) {
           console.error(`Error processing company ${company.company_number}:`, error)
@@ -256,7 +247,6 @@ export async function GET(request: NextRequest) {
 
     const results = rawResults.filter((result): result is CompanyResult => result !== null)
     results.sort((a, b) =>
-      b.opportunityScore - a.opportunityScore ||
       b.retiringSoonCount - a.retiringSoonCount ||
       b.directors.length - a.directors.length
     )

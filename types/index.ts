@@ -30,14 +30,6 @@ export interface Director {
   nationality?: string
 }
 
-export interface OpportunityScoreBreakdown {
-  successionPressure: number
-  leadershipConcentration: number
-  businessMaturity: number
-  leadershipTenure: number
-  dataConfidence: number
-}
-
 export interface CompanyResult {
   companyNumber: string
   companyName: string
@@ -55,8 +47,6 @@ export interface CompanyResult {
   directors: Director[]
   retiringSoonCount: number
   knownDirectorAges: number
-  opportunityScore: number
-  scoreBreakdown: OpportunityScoreBreakdown
 }
 
 export interface CompaniesHouseCompany {

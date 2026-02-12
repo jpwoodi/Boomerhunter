@@ -164,12 +164,7 @@ export default function CompanyResults({
 
             {/* Metrics Grid */}
             <div className="p-4 border-b border-slate-200">
-              <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-                <div>
-                  <div className="text-xs text-slate-500 mb-1">Opportunity Score</div>
-                  <div className="text-2xl font-semibold text-slate-900">{company.opportunityScore}</div>
-                  <div className="text-xs text-slate-600">/ 100</div>
-                </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
                   <div className="text-xs text-slate-500 mb-1">Retiring Soon</div>
                   <div className="text-2xl font-semibold text-orange-600">{company.retiringSoonCount}</div>
@@ -184,34 +179,6 @@ export default function CompanyResults({
                   <div className="text-xs text-slate-500 mb-1">Total Directors</div>
                   <div className="text-2xl font-semibold text-slate-900">{company.directors.length}</div>
                   <div className="text-xs text-slate-600">{company.knownDirectorAges} known ages</div>
-                </div>
-                <div>
-                  <div className="text-xs text-slate-500 mb-1">Data Confidence</div>
-                  <div className="text-2xl font-semibold text-slate-900">{company.scoreBreakdown.dataConfidence}</div>
-                  <div className="text-xs text-slate-600">/ 20</div>
-                </div>
-              </div>
-            </div>
-
-            {/* Score Breakdown */}
-            <div className="px-4 py-3 bg-slate-50 border-b border-slate-200">
-              <div className="text-xs font-medium text-slate-700 mb-2">SCORE BREAKDOWN</div>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
-                <div className="flex justify-between">
-                  <span className="text-slate-600">Succession Pressure</span>
-                  <span className="font-medium text-slate-900">{company.scoreBreakdown.successionPressure}/30</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-600">Leadership Concentration</span>
-                  <span className="font-medium text-slate-900">{company.scoreBreakdown.leadershipConcentration}/20</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-600">Business Maturity</span>
-                  <span className="font-medium text-slate-900">{company.scoreBreakdown.businessMaturity}/15</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-600">Leadership Tenure</span>
-                  <span className="font-medium text-slate-900">{company.scoreBreakdown.leadershipTenure}/15</span>
                 </div>
               </div>
             </div>
