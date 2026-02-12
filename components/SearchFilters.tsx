@@ -59,36 +59,36 @@ export default function SearchFilters({ onSearch, isLoading }: SearchFiltersProp
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
-      <h2 className="text-2xl font-semibold text-slate-800 mb-4">
-        Search Filters
+    <div className="bg-white border border-slate-200 rounded p-6 mb-6">
+      <h2 className="text-lg font-semibold text-slate-900 mb-4">
+        Search Criteria
       </h2>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-5">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label htmlFor="companyName" className="block text-sm font-medium text-slate-700 mb-1">
-              Company Name (optional)
+            <label htmlFor="companyName" className="block text-xs font-medium text-slate-700 mb-1.5">
+              COMPANY NAME
             </label>
             <input
               type="text"
               id="companyName"
               value={companyName}
               onChange={(e) => setCompanyName(e.target.value)}
-              placeholder="e.g., Acme Ltd"
-              className="w-full px-4 py-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              placeholder="Enter company name"
+              className="w-full px-3 py-2 text-sm border border-slate-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
 
           <div>
-            <label htmlFor="industryDivision" className="block text-sm font-medium text-slate-700 mb-1">
-              Industry (optional)
+            <label htmlFor="industryDivision" className="block text-xs font-medium text-slate-700 mb-1.5">
+              INDUSTRY
             </label>
             <select
               id="industryDivision"
               value={industryDivision}
               onChange={(e) => setIndustryDivision(e.target.value)}
-              className="w-full px-4 py-2 border border-slate-300 rounded-md bg-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              className="w-full px-3 py-2 text-sm border border-slate-300 rounded bg-white focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
             >
               <option value="">All industries</option>
               {COMPANIES_HOUSE_INDUSTRIES.map((industry) => (
@@ -100,10 +100,10 @@ export default function SearchFilters({ onSearch, isLoading }: SearchFiltersProp
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div>
-            <label htmlFor="minAge" className="block text-sm font-medium text-slate-700 mb-1">
-              Minimum Director Age
+            <label htmlFor="minAge" className="block text-xs font-medium text-slate-700 mb-1.5">
+              MIN AGE
             </label>
             <input
               type="number"
@@ -112,13 +112,13 @@ export default function SearchFilters({ onSearch, isLoading }: SearchFiltersProp
               onChange={(e) => setMinAge(e.target.value)}
               min={MIN_ALLOWED_AGE}
               max={MAX_ALLOWED_AGE}
-              className="w-full px-4 py-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              className="w-full px-3 py-2 text-sm border border-slate-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
 
           <div>
-            <label htmlFor="maxAge" className="block text-sm font-medium text-slate-700 mb-1">
-              Maximum Director Age
+            <label htmlFor="maxAge" className="block text-xs font-medium text-slate-700 mb-1.5">
+              MAX AGE
             </label>
             <input
               type="number"
@@ -127,76 +127,70 @@ export default function SearchFilters({ onSearch, isLoading }: SearchFiltersProp
               onChange={(e) => setMaxAge(e.target.value)}
               min={MIN_ALLOWED_AGE}
               max={MAX_ALLOWED_AGE}
-              className="w-full px-4 py-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              className="w-full px-3 py-2 text-sm border border-slate-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
             />
+          </div>
+
+          <div className="col-span-2 flex items-end">
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-slate-400 text-white text-sm font-medium py-2 px-4 rounded transition-colors"
+            >
+              {isLoading ? 'Searching...' : 'Search'}
+            </button>
           </div>
         </div>
 
         {formError && (
-          <div className="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+          <div className="rounded border-l-4 border-red-500 bg-red-50 p-3 text-xs text-red-700">
             {formError}
           </div>
         )}
 
-        <div className="border-t border-slate-200 pt-4 space-y-3">
-          <p className="text-sm font-semibold text-slate-700 mb-2">Search Options</p>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <div className="flex items-center gap-2">
+        <div className="pt-3 border-t border-slate-200">
+          <p className="text-xs font-medium text-slate-700 mb-3">FILTERS</p>
+          <div className="space-y-2">
+            <label className="flex items-center gap-2 text-sm text-slate-700 cursor-pointer">
               <input
                 type="checkbox"
                 id="exactNameOnly"
                 checked={exactNameOnly}
                 onChange={(e) => setExactNameOnly(e.target.checked)}
-                className="h-4 w-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500"
+                className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
               />
-              <label htmlFor="exactNameOnly" className="text-sm text-slate-700">
-                Exact name match only
-              </label>
-            </div>
+              <span className="text-xs">Exact name match only</span>
+            </label>
 
-            <div className="flex items-center gap-2">
+            <label className="flex items-center gap-2 text-sm text-slate-700 cursor-pointer">
               <input
                 type="checkbox"
                 id="activeCompaniesOnly"
                 checked={activeCompaniesOnly}
                 onChange={(e) => setActiveCompaniesOnly(e.target.checked)}
-                className="h-4 w-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500"
+                className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
               />
-              <label htmlFor="activeCompaniesOnly" className="text-sm text-slate-700">
-                Active companies only
-              </label>
-            </div>
-          </div>
+              <span className="text-xs">Active companies only</span>
+            </label>
 
-          <div className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              id="includeNoRetirementMatches"
-              checked={includeNoRetirementMatches}
-              onChange={(e) => setIncludeNoRetirementMatches(e.target.checked)}
-              className="h-4 w-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500"
-            />
-            <label htmlFor="includeNoRetirementMatches" className="text-sm text-slate-700">
-              Include companies with no directors in target age range
+            <label className="flex items-center gap-2 text-sm text-slate-700 cursor-pointer">
+              <input
+                type="checkbox"
+                id="includeNoRetirementMatches"
+                checked={includeNoRetirementMatches}
+                onChange={(e) => setIncludeNoRetirementMatches(e.target.checked)}
+                className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+              />
+              <span className="text-xs">Include companies with no directors in target age range</span>
             </label>
           </div>
         </div>
 
-        <div className="bg-blue-50 border border-blue-200 rounded-md p-3">
-          <p className="text-sm text-slate-700">
-            <strong>💡 Tip:</strong> Results are ranked by opportunity score based on succession pressure,
-            leadership concentration, maturity, tenure, and data confidence.
+        <div className="bg-slate-50 border border-slate-200 rounded p-3">
+          <p className="text-xs text-slate-600">
+            <span className="font-medium">Note:</span> Results are ranked by opportunity score based on succession pressure, leadership concentration, maturity, tenure, and data confidence.
           </p>
         </div>
-
-        <button
-          type="submit"
-          disabled={isLoading}
-          className="w-full bg-primary-600 hover:bg-primary-700 disabled:bg-slate-400 text-white font-semibold py-3 px-6 rounded-md transition-colors duration-200"
-        >
-          {isLoading ? 'Searching...' : 'Search Companies'}
-        </button>
       </form>
     </div>
   )
