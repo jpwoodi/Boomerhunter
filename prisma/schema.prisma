@@ -1,0 +1,95 @@
+// Prisma schema for Companies House bulk data
+// Run: npx prisma migrate dev --name init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Company {
+  companyNumber     String    @id @map("company_number") @db.VarChar(8)
+  companyName       String    @map("company_name") @db.Text
+  companyStatus     String    @map("company_status") @db.VarChar(50)
+  dateOfCreation    DateTime? @map("date_of_creation") @db.Date
+
+  // SIC Codes (up to 4 per company)
+  sicCode1          String?   @map("sic_code_1") @db.VarChar(5)
+  sicCode2          String?   @map("sic_code_2") @db.VarChar(5)
+  sicCode3          String?   @map("sic_code_3") @db.VarChar(5)
+  sicCode4          String?   @map("sic_code_4") @db.VarChar(5)
+
+  // Registered Address
+  addressLine1      String?   @map("address_line_1") @db.Text
+  addressLine2      String?   @map("address_line_2") @db.Text
+  locality          String?   @db.Text
+  region            String?   @db.Text
+  postalCode        String?   @map("postal_code") @db.VarChar(20)
+  country           String?   @db.VarChar(50)
+
+  // Metadata
+  importedAt        DateTime  @default(now()) @map("imported_at")
+
+  // Relations
+  officers          Officer[]
+
+  // Indexes for fast searching
+  @@index([companyStatus], map: "idx_company_status")
+  @@index([sicCode1, sicCode2], map: "idx_sic_codes")
+  @@index([region], map: "idx_region")
+  @@index([postalCode], map: "idx_postal_code")
+  @@index([dateOfCreation], map: "idx_date_of_creation")
+  @@index([companyName], map: "idx_company_name", type: Gin)
+
+  @@map("companies")
+}
+
+model Officer {
+  id                 Int       @id @default(autoincrement())
+  companyNumber      String    @map("company_number") @db.VarChar(8)
+  name               String    @db.Text
+  officerRole        String?   @map("officer_role") @db.VarChar(100)
+
+  // Dates
+  appointedOn        DateTime? @map("appointed_on") @db.Date
+  resignedOn         DateTime? @map("resigned_on") @db.Date
+
+  // Date of Birth (year and month only for privacy)
+  dateOfBirthYear    Int?      @map("date_of_birth_year")
+  dateOfBirthMonth   Int?      @map("date_of_birth_month")
+
+  // Additional Info
+  nationality        String?   @db.VarChar(50)
+  occupation         String?   @db.Text
+
+  // Metadata
+  importedAt         DateTime  @default(now()) @map("imported_at")
+
+  // Relations
+  company            Company   @relation(fields: [companyNumber], references: [companyNumber], onDelete: Cascade)
+
+  // Indexes for fast filtering
+  @@index([companyNumber], map: "idx_officer_company")
+  @@index([dateOfBirthYear], map: "idx_officer_birth_year")
+  @@index([resignedOn], map: "idx_officer_resigned")
+  @@index([officerRole], map: "idx_officer_role")
+
+  @@map("officers")
+}
+
+// Table to track data imports
+model DataImport {
+  id                 Int       @id @default(autoincrement())
+  importType         String    @map("import_type") @db.VarChar(50) // 'companies' or 'officers'
+  fileName           String    @map("file_name") @db.Text
+  recordsImported    Int       @map("records_imported")
+  startedAt          DateTime  @map("started_at")
+  completedAt        DateTime? @map("completed_at")
+  status             String    @db.VarChar(20) // 'in_progress', 'completed', 'failed'
+  errorMessage       String?   @map("error_message") @db.Text
+
+  @@map("data_imports")
+}
