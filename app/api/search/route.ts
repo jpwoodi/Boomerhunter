@@ -20,9 +20,9 @@ export const dynamic = 'force-dynamic'
 const EXACT_NAME_ITEMS_PER_PAGE = 100
 const EXACT_NAME_MAX_PAGES = 8
 const INDUSTRY_ITEMS_PER_PAGE = 100
-const INDUSTRY_PAGES_PER_QUERY = 2
-const INDUSTRY_MAX_QUERIES = 6
-const MAX_CANDIDATE_COMPANIES = 120
+const INDUSTRY_PAGES_PER_QUERY = 5  // Increased from 2 to get more candidates
+const INDUSTRY_MAX_QUERIES = 10      // Increased from 6 for better coverage
+const MAX_CANDIDATE_COMPANIES = 500  // Increased from 120 for industry longlists
 const OFFICER_FETCH_CONCURRENCY = 4
 
 async function fetchCompaniesByExactName(
