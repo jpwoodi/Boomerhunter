@@ -143,9 +143,7 @@ export async function GET(request: NextRequest) {
     } else if (industryDivision) {
       matchedCompanies = await fetchIndustryCandidates(companiesHouse, industryDivision)
     } else {
-      matchedCompanies = await companiesHouse.advancedSearch({
-        itemsPerPage: 60,
-      })
+      matchedCompanies = await companiesHouse.browseActiveCompanies(60, 0)
     }
 
     if (selectedIndustry) {

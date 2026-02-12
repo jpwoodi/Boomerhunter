@@ -138,49 +138,55 @@ export default function SearchFilters({ onSearch, isLoading }: SearchFiltersProp
           </div>
         )}
 
-        <div className="flex items-center gap-2">
-          <input
-            type="checkbox"
-            id="exactNameOnly"
-            checked={exactNameOnly}
-            onChange={(e) => setExactNameOnly(e.target.checked)}
-            className="h-4 w-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500"
-          />
-          <label htmlFor="exactNameOnly" className="text-sm font-medium text-slate-700">
-            Exact name only
-          </label>
+        <div className="border-t border-slate-200 pt-4 space-y-3">
+          <p className="text-sm font-semibold text-slate-700 mb-2">Search Options</p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                id="exactNameOnly"
+                checked={exactNameOnly}
+                onChange={(e) => setExactNameOnly(e.target.checked)}
+                className="h-4 w-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500"
+              />
+              <label htmlFor="exactNameOnly" className="text-sm text-slate-700">
+                Exact name match only
+              </label>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                id="activeCompaniesOnly"
+                checked={activeCompaniesOnly}
+                onChange={(e) => setActiveCompaniesOnly(e.target.checked)}
+                className="h-4 w-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500"
+              />
+              <label htmlFor="activeCompaniesOnly" className="text-sm text-slate-700">
+                Active companies only
+              </label>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              id="includeNoRetirementMatches"
+              checked={includeNoRetirementMatches}
+              onChange={(e) => setIncludeNoRetirementMatches(e.target.checked)}
+              className="h-4 w-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500"
+            />
+            <label htmlFor="includeNoRetirementMatches" className="text-sm text-slate-700">
+              Include companies with no directors in target age range
+            </label>
+          </div>
         </div>
 
-        <div className="flex items-center gap-2">
-          <input
-            type="checkbox"
-            id="activeCompaniesOnly"
-            checked={activeCompaniesOnly}
-            onChange={(e) => setActiveCompaniesOnly(e.target.checked)}
-            className="h-4 w-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500"
-          />
-          <label htmlFor="activeCompaniesOnly" className="text-sm font-medium text-slate-700">
-            Active companies only
-          </label>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <input
-            type="checkbox"
-            id="includeNoRetirementMatches"
-            checked={includeNoRetirementMatches}
-            onChange={(e) => setIncludeNoRetirementMatches(e.target.checked)}
-            className="h-4 w-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500"
-          />
-          <label htmlFor="includeNoRetirementMatches" className="text-sm font-medium text-slate-700">
-            Include companies with no directors in age range
-          </label>
-        </div>
-
-        <div className="bg-blue-50 border border-blue-200 rounded-md p-4">
+        <div className="bg-blue-50 border border-blue-200 rounded-md p-3">
           <p className="text-sm text-slate-700">
-            <strong>Note:</strong> Results are ranked by a search-fund opportunity score built from
-            succession pressure, leadership concentration, company maturity, tenure, and data confidence.
+            <strong>💡 Tip:</strong> Results are ranked by opportunity score based on succession pressure,
+            leadership concentration, maturity, tenure, and data confidence.
           </p>
         </div>
 

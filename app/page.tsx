@@ -191,14 +191,14 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
-      <div className="container mx-auto px-4 py-8">
-        <header className="mb-8 text-center">
-          <h1 className="text-5xl font-bold text-slate-800 mb-2">
-            BoomerHunter
+    <main className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100">
+      <div className="container mx-auto px-4 py-6 md:py-8">
+        <header className="mb-6 md:mb-8 text-center">
+          <h1 className="text-4xl md:text-5xl font-bold text-slate-800 mb-2">
+            🎯 BoomerHunter
           </h1>
-          <p className="text-xl text-slate-600">
-            Find UK companies with succession opportunities
+          <p className="text-lg md:text-xl text-slate-600">
+            Discover UK companies with succession opportunities
           </p>
         </header>
 
