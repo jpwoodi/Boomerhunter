@@ -121,9 +121,6 @@ export default function CompanyResults({
       {/* Company Cards */}
       {results.map((company) => {
         const isShortlisted = shortlistedCompanyNumbers.has(company.companyNumber)
-        const retirementRate = company.directors.length > 0
-          ? (company.retiringSoonCount / company.directors.length) * 100
-          : 0
 
         return (
           <div
@@ -159,27 +156,6 @@ export default function CompanyResults({
                 >
                   {isShortlisted ? 'Shortlisted' : 'Add to Shortlist'}
                 </button>
-              </div>
-            </div>
-
-            {/* Metrics Grid */}
-            <div className="p-4 border-b border-slate-200">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                  <div className="text-xs text-slate-500 mb-1">Retiring Soon</div>
-                  <div className="text-2xl font-semibold text-orange-600">{company.retiringSoonCount}</div>
-                  <div className="text-xs text-slate-600">directors</div>
-                </div>
-                <div>
-                  <div className="text-xs text-slate-500 mb-1">Retirement Rate</div>
-                  <div className="text-2xl font-semibold text-slate-900">{retirementRate.toFixed(0)}%</div>
-                  <div className="text-xs text-slate-600">of board</div>
-                </div>
-                <div>
-                  <div className="text-xs text-slate-500 mb-1">Total Directors</div>
-                  <div className="text-2xl font-semibold text-slate-900">{company.directors.length}</div>
-                  <div className="text-xs text-slate-600">{company.knownDirectorAges} known ages</div>
-                </div>
               </div>
             </div>
 
