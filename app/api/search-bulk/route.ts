@@ -127,7 +127,7 @@ export async function GET(request: NextRequest) {
     const results: CompanyResult[] = []
 
     for (const company of companies) {
-      const directors: Director[] = company.officers.map(officer => {
+      const directors: Director[] = company.officers.map((officer: (typeof company.officers)[number]) => {
         const director: Director = {
           name: officer.name,
           dateOfBirth: officer.dateOfBirthYear && officer.dateOfBirthMonth
