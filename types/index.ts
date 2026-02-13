@@ -47,6 +47,7 @@ export interface CompanyResult {
   directors: Director[]
   retiringSoonCount: number
   knownDirectorAges: number
+  opportunityScore?: number
 }
 
 export interface CompaniesHouseCompany {
