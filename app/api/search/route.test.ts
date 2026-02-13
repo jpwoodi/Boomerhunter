@@ -175,8 +175,6 @@ describe('GET /api/search', () => {
     const data = await response.json()
 
     expect(data.results).toHaveLength(1)
-    expect(data.results[0].opportunityScore).toBeGreaterThan(0)
-    expect(data.results[0].scoreBreakdown).toBeDefined()
     expect(data.results[0].retiringSoonCount).toBe(2)
   })
 
@@ -249,8 +247,8 @@ describe('GET /api/search', () => {
     const data = await response.json()
 
     if (data.results.length >= 2) {
-      expect(data.results[0].opportunityScore).toBeGreaterThanOrEqual(
-        data.results[1].opportunityScore
+      expect(data.results[0].retiringSoonCount).toBeGreaterThanOrEqual(
+        data.results[1].retiringSoonCount
       )
     }
   })

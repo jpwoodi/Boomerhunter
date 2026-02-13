@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server'
 import { CompaniesHouseService } from '@/lib/services/companiesHouse'
 import { COMPANIES_HOUSE_INDUSTRIES } from '@/lib/data/industries'
 import { mapWithConcurrency } from '@/lib/utils/async'
-import { calculateOpportunityScore } from '@/lib/utils/scoring'
 import { calculateAge, isRetirementAge } from '@/lib/utils/age'
 import {
   buildIndustryQueries,
@@ -21,9 +20,9 @@ export const dynamic = 'force-dynamic'
 const EXACT_NAME_ITEMS_PER_PAGE = 100
 const EXACT_NAME_MAX_PAGES = 8
 const INDUSTRY_ITEMS_PER_PAGE = 100
-const INDUSTRY_PAGES_PER_QUERY = 2
-const INDUSTRY_MAX_QUERIES = 6
-const MAX_CANDIDATE_COMPANIES = 120
+const INDUSTRY_PAGES_PER_QUERY = 5  // Increased from 2 to get more candidates
+const INDUSTRY_MAX_QUERIES = 10      // Increased from 6 for better coverage
+const MAX_CANDIDATE_COMPANIES = 500  // Increased from 120 for industry longlists
 const OFFICER_FETCH_CONCURRENCY = 4
 
 async function fetchCompaniesByExactName(
@@ -221,12 +220,6 @@ export async function GET(request: NextRequest) {
             return null
           }
 
-          const score = calculateOpportunityScore({
-            company,
-            directors,
-            retiringSoonCount,
-          })
-
           return {
             companyNumber: company.company_number,
             companyName: company.company_name,
@@ -244,8 +237,6 @@ export async function GET(request: NextRequest) {
             directors,
             retiringSoonCount,
             knownDirectorAges,
-            opportunityScore: score.total,
-            scoreBreakdown: score.breakdown,
           }
         } catch (error) {
           console.error(`Error processing company ${company.company_number}:`, error)
@@ -256,7 +247,6 @@ export async function GET(request: NextRequest) {
 
     const results = rawResults.filter((result): result is CompanyResult => result !== null)
     results.sort((a, b) =>
-      b.opportunityScore - a.opportunityScore ||
       b.retiringSoonCount - a.retiringSoonCount ||
       b.directors.length - a.directors.length
     )

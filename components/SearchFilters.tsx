@@ -275,7 +275,7 @@ export default function SearchFilters({ onSearch, isLoading }: SearchFiltersProp
 
         <div className="bg-slate-50 border border-slate-200 rounded p-3">
           <p className="text-xs text-slate-600">
-            <span className="font-medium">Note:</span> Results are ranked by opportunity score based on succession pressure, leadership concentration, maturity, tenure, and data confidence.
+            <span className="font-medium">Note:</span> Results are ranked by number of directors in target age range, then by total director count.
           </p>
         </div>
       </form>
